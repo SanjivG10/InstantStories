@@ -4,6 +4,7 @@ import  {Scene,Router} from 'react-native-router-flux'
 import Login from './login'
 import SignUp from './signUp'
 import Home from './HomePage/home'
+import UserSettings from './HomePage/userSettings'
 
 import CustomNavBar from './HomePage/customNavbar'
 
@@ -21,6 +22,7 @@ class AllRoutes extends React.Component
 
         <Scene  key="login" component={Login}  title= "Login" />
         <Scene   key="signUp" component={SignUp}  title= "SignUp"  />
+        <Scene key= "UserSettings" component= {UserSettings} title= "Manage Your Settings" />
 
 
 

@@ -56,7 +56,7 @@ class HomePage extends React.Component
 
         <ListViewDay />
 
-        <UserInfo />
+        <UserInfo showPanel />
 
         <TopUsersPost />
 

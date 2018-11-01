@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, TouchableOpacity, Dimensions} from  'react-native'
+import {Text, View, TouchableOpacity, Dimensions,TextInput,Alert} from  'react-native'
 import {Screen, Image, Button, ListView, Card} from '@shoutem/ui'
 
 
@@ -22,7 +22,7 @@ const styles= {
     width:200,
     marginTop: 10,
     height:200,
-    backgroundColor:'#fff',
+    backgroundColor:'#ececec',
 
   },
   profileDetailUsernameStyle: {
@@ -32,10 +32,19 @@ const styles= {
   },
   profileDetailFollowStyle: {
 
+  },
+  usernameEditStyle: {
+    borderWidth: 1,
+    borderColor: '#000',
+    elevation: 2,
+    marginTop: 20,
+    padding: 5,
+    width: width,
+    marginLeft: 10,
+    marginRight: 10
   }
 }
 
-const ImageID = "https://scontent.fktm3-1.fna.fbcdn.net/v/t1.0-9/42247263_499791153765567_8151577168774692864_n.jpg?_nc_cat=103&_nc_ht=scontent.fktm3-1.fna&oh=3c57b985c3b715ffdeaafbd0c49fd5df&oe=5C3FD2A3"
 
 class UserInfoView extends React.Component
 {
@@ -45,21 +54,48 @@ class UserInfoView extends React.Component
     super(props);
   }
 
+  alertOpen()
+  {
+    if (this.props.editable)
+      {
+        Alert.alert(
+          'Upload Your Profile Photo',
+          'Choose From Gallery or Camera',
+          [
+            {text: 'Camera', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'Gallery', onPress: () => console.log('OK Pressed')},
+          ],
+          { cancelable: true }
+        )
+      }
+  }
+
 
   render() {
     return(
       <Card userid= {this.props.id}  style= {styles.cardStyle}  >
-        <Image
-          style= {styles.profileDetailImageStyle}
-          source={{ uri: ImageID }}
-        />
+        <TouchableOpacity onPress= { ()=> this.alertOpen()   }
+>
+            <Image
+              style= {styles.profileDetailImageStyle}
+              source={require('./../user.png')}
+            />
+        </TouchableOpacity>
 
-        <Text style= {styles.profileDetailUsernameStyle}>
-          @abhayRaut
-        </Text>
 
-        <FollowingPanel />
+        { this.props.editable ?
+          <TextInput style = {styles.usernameEditStyle}
+            placeholder={'username'}
+            maxLength= {12}
+          />
+          :
+          <Text style= {styles.profileDetailUsernameStyle}>
+            @abhayRaut
+          </Text>
+        }
 
+
+        {  this.props.showPanel ? <FollowingPanel /> : null }
       </Card>
 
     )

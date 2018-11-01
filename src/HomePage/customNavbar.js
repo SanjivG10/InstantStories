@@ -12,6 +12,10 @@ const styles= {
   navBarItem: {
     flex: 1,
     justifyContent: 'center'
+  },
+  rightSideNavbarStyle: {
+    flexDirection:'row',
+    justifyContent: 'space-around'
   }
 }
 
@@ -57,9 +61,14 @@ class CustomNavBar extends React.Component
   renderRight()
   {
     return(
-      <TouchableOpacity style={{ paddingRight: 10 }} onPress= {  ()=> this.alertOpen()   }   >
-          <Image style={{ width: 30, height: 50 }} resizeMode="contain" source={require('./../plus.png')}  />
+      <View style={styles.rightSideNavbarStyle}>
+        <TouchableOpacity style={{ paddingRight: 10 }} onPress= {  ()=> this.alertOpen()   }   >
+            <Image style={{ width: 30, height: 50 }} resizeMode="contain" source={require('./../plus.png')}  />
         </TouchableOpacity>
+        <TouchableOpacity style={{ paddingRight: 10 }} onPress= {  ()=> Actions.UserSettings()   }   >
+            <Image style={{ width: 30, height: 50 }} resizeMode="contain" source={require('./../settings.png')}  />
+        </TouchableOpacity>
+      </View>
     )
   }
 
