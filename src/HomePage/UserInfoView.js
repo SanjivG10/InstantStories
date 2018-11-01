@@ -1,12 +1,16 @@
 import React from 'react'
 import {Text, View, TouchableOpacity, Dimensions,TextInput,Alert} from  'react-native'
 import {Screen, Image, Button, ListView, Card} from '@shoutem/ui'
+import ImagePicker from 'react-native-image-picker';
+
 
 
 import FollowingPanel from './followingPanel'
+import FollowersList from './followersList'
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
+
 
 
 const styles= {
@@ -42,9 +46,18 @@ const styles= {
     width: width,
     marginLeft: 10,
     marginRight: 10
+  },
+  buttonStyle:{
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: '#000',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  userSettingsSaveButtonTextStyle: {
+    padding: 10
   }
 }
-
 
 class UserInfoView extends React.Component
 {
@@ -52,33 +65,51 @@ class UserInfoView extends React.Component
   constructor(props)
   {
     super(props);
+    this.state= {
+      image: null
+    }
   }
 
-  alertOpen()
+  openGallery()
   {
-    if (this.props.editable)
-      {
-        Alert.alert(
-          'Upload Your Profile Photo',
-          'Choose From Gallery or Camera',
-          [
-            {text: 'Camera', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-            {text: 'Gallery', onPress: () => console.log('OK Pressed')},
-          ],
-          { cancelable: true }
-        )
+    ImagePicker.showImagePicker(null, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.warn('User cancelled image picker');
+      } else if (response.error) {
+        console.warn('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.warn('User tapped custom button: ', response.customButton);
+      } else {
+        const source = { uri: response.uri };
+
+
+
+        this.setState({
+          image: source,
+          username: ''
+
+        });
       }
+    });
+  }
+
+  saveNewUserData(username,image)
+  {
+    console.warn()
   }
 
 
   render() {
+
     return(
       <Card userid= {this.props.id}  style= {styles.cardStyle}  >
-        <TouchableOpacity onPress= { ()=> this.alertOpen()   }
+        <TouchableOpacity onPress= { ()=> this.openGallery()   }
 >
             <Image
               style= {styles.profileDetailImageStyle}
-              source={require('./../user.png')}
+              source={this.state.image || require('./../user.png')}
             />
         </TouchableOpacity>
 
@@ -94,8 +125,19 @@ class UserInfoView extends React.Component
           </Text>
         }
 
-
         {  this.props.showPanel ? <FollowingPanel /> : null }
+
+        {  this.props.editable ?
+          <Button  style= {styles.buttonStyle} onPress = { () => this.saveNewUserData( this.state.username, this.state.image )} >
+            <Text style= {styles.userSettingsSaveButtonTextStyle}> Save </Text>
+          </Button>
+           : null }
+
+        {  this.props.editable ?
+            <FollowersList />: null
+        }
+
+
       </Card>
 
     )
