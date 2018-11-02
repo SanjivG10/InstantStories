@@ -51,7 +51,7 @@ class CustomNavBar extends React.Component
             <Image
               style={{ width: 30, height: 50 }}
               resizeMode="contain"
-              source={require('./../logout.png')}
+              source={require('./../icons/logout.png')}
             />
           </TouchableOpacity>
         );
@@ -63,10 +63,10 @@ class CustomNavBar extends React.Component
     return(
       <View style={styles.rightSideNavbarStyle}>
         <TouchableOpacity style={{ paddingRight: 10 }} onPress= {  ()=> this.alertOpen()   }   >
-            <Image style={{ width: 30, height: 50 }} resizeMode="contain" source={require('./../plus.png')}  />
+            <Image style={{ width: 30, height: 50 }} resizeMode="contain" source={require('./../icons/plus.png')}  />
         </TouchableOpacity>
         <TouchableOpacity style={{ paddingRight: 10 }} onPress= {  ()=> Actions.UserSettings()   }   >
-            <Image style={{ width: 30, height: 50 }} resizeMode="contain" source={require('./../settings.png')}  />
+            <Image style={{ width: 30, height: 50 }} resizeMode="contain" source={require('./../icons/settings.png')}  />
         </TouchableOpacity>
       </View>
     )

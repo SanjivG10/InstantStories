@@ -15,7 +15,6 @@ const height = Dimensions.get('window').height;
 
 const styles= {
   cardStyle: {
-    marginTop: 10,
     backgroundColor: '#f9f9f9',
     width: width,
     alignItems: 'center',
@@ -33,9 +32,6 @@ const styles= {
     fontFamily: 'monospace',
     marginTop: 10,
     size: 30
-  },
-  profileDetailFollowStyle: {
-
   },
   usernameEditStyle: {
     borderWidth: 1,
@@ -109,7 +105,7 @@ class UserInfoView extends React.Component
 >
             <Image
               style= {styles.profileDetailImageStyle}
-              source={this.state.image || require('./../user.png')}
+              source={this.state.image || require('./../icons/user.png')}
             />
         </TouchableOpacity>
 
@@ -133,9 +129,19 @@ class UserInfoView extends React.Component
           </Button>
            : null }
 
-        {  this.props.editable ?
-            <FollowersList />: null
-        }
+
+           { this.props.editable ?
+             <Text style= {{alignSelf: 'center', marginTop: 10, fontFamily: 'monospace'  }}>
+              Followers
+             </Text>:
+              null
+            }
+
+           {
+             this.props.editable ?
+             <FollowersList /> :
+             null
+           }
 
 
       </Card>

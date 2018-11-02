@@ -1,19 +1,16 @@
 import React from 'react'
-import {Text, Dimensions} from 'react-native'
+import {Text} from 'react-native'
 
 import {TextInput, Screen, Image, Button,Title, NavigationBar, TouchableOpacity } from '@shoutem/ui'
 import {Actions} from 'react-native-router-flux'
 
-
-// firebase config
+// firebase
 import firebase from 'firebase'
-import config from './config'
 
+// selfmade Component
 import Home from './HomePage/home'
 import Spinner from './spinner'
-
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
+import {width,height} from './config'
 
 const styles= {
   textInputStyle: {
@@ -70,7 +67,8 @@ class SignUp extends React.Component
       email: '',
       password: '',
       re_password: '',
-      isLoading: false
+      isLoading: false,
+      user : undefined
     }
   }
 
@@ -78,54 +76,93 @@ class SignUp extends React.Component
 
   setEmailText(email)
   {
-    var oldProperties =  {...this.state}
-    oldProperties.email = email
-    this.setState(oldProperties)
+    this.setState({
+      email
+    })
   }
 
   setPasswordText(password)
   {
-    var oldProperties =  {...this.state}
-    oldProperties.password = password
-    this.setState(oldProperties)
+    this.setState({
+      password
+    })
   }
 
   setRePasswordText(re_password)
   {
-    var oldProperties =  {...this.state}
-    oldProperties.re_password = re_password
-    this.setState(oldProperties)
+    this.setState({
+      re_password
+    })
+  }
+
+
+
+//firebase database saving
+  saveDatabase(userID)
+  {
+    var currRef = this;
+     firebase.database().ref('users/' + userID).set({
+     username: this.state.username,
+     email: this.state.email,
+     password: this.state.password
+     }, function(error) {
+       if (error) {
+         currRef.setState({
+           error : error.message,
+           isLoading: false
+         })
+         return false
+       }
+       else {
+         Actions.main_home({user: this.state.user})
+         return true
+       }
+     });
   }
 
   startSignUp()
   {
 
-    var oldProperties =  {...this.state}
-    oldProperties.isLoading = true
-    this.setState(oldProperties)
+    this.setState({
+      isLoading: true,
+      error: ''
+    })
 
-    if (this.state.password===this.state.re_password )
+    if (this.state.password===this.state.re_password)
     {
+      let currRef = this;
       firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(
-          ()=> Actions.main_home({type: 'reset'})
+          ()=> {
+            const user = firebase.auth().currentUser;
+            const userId = user.uid;
+
+            this.setState({
+              user
+            })
+
+            if(this.saveDatabase(userId))
+              {
+                Actions.main_home({user: this.state.user})
+              }
+          }
       ).catch(
         (error)=>{
-          var oldProperties =  {...this.state}
-          oldProperties.error= error.message
-          oldProperties.isLoading = false
-          this.setState(oldProperties)
+          this.setState({
+            isLoading: false,
+            error: error.message
+          })
         }
       )
     }
+
     else
     {
-      var oldProperties =  {...this.state}
-      oldProperties.isLoading = false
-      oldProperties.error= "The password do not match"
-      this.setState(oldProperties)
-      console.warn('NOT EQUAL')
-
+      this.setState({
+        isLoading: false,
+        error: 'Password do not match!'
+      })
     }
+
   }
 
   render()
@@ -140,8 +177,9 @@ class SignUp extends React.Component
               <Image
                 styleName="small"
                 style= {styles.imageStyle}
-                source={require('./boy.png')}
+                source={require('./icons/boy.png')}
               />
+
 
               <TextInput
                 style= {styles.textInputStyle}

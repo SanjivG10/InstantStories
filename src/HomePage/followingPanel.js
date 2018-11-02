@@ -33,14 +33,14 @@ class FollowingPanel extends React.Component
       <View style= {styles.followPanelViewStyle}>
 
         <TouchableOpacity>
-          <Image style ={styles.iconStyle} source={require('./../following.png')} />
+          <Image style ={styles.iconStyle} source={require('./../icons/following.png')} />
           <Text style= {styles.followTextStyle}>
             2.5k
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity>
-          <Image style ={styles.iconStyle} source={require('./../following_them.png')} />
+          <Image style ={styles.iconStyle} source={require('./../icons/following_them.png')} />
           <Text style= {styles.followingTextStyle}>
             3.3m
           </Text>

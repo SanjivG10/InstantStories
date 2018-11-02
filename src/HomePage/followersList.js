@@ -1,10 +1,29 @@
 import React from  'react'
-import {Text,View, FlatList} from 'react-native'
+import {Text,View,TouchableOpacity, FlatList, Image, Dimensions} from 'react-native'
+import {Divider} from '@shoutem/ui'
+
+const width = Dimensions.get('window').width;
 
 
 const styles = {
-  followersListTopView: {
-    marginTop: 10
+  flatListStyle: {
+    marginTop: 20,
+    fontFamily: 'monospace'
+  },
+  eachFlatListViewStyle: {
+    flexDirection: 'row',
+    width: width,
+    marginBottom: 10,
+    marginLeft: 20
+  },
+  eachImageStyle: {
+    width: 80,
+    height: 80,
+    borderRadius: 100
+  },
+  eachFollowerNameStyle: {
+    alignSelf: 'center',
+    marginLeft: 20
   }
 }
 
@@ -43,17 +62,27 @@ export default class FollowersList extends React.Component
     const arrayOfData = Object.values(fakeData);
 
     return(
-      <View style= {styles.followersListTopView}>
         <FlatList
+          style= {styles.flatListStyle}
           data={
               arrayOfData
           }
           renderItem={
             ({item}) =>
-            <Text>{item.username}</Text>
+              {
+                return (
+                  <View>
+                    <TouchableOpacity style={styles.eachFlatListViewStyle}>
+                      <Image style= {styles.eachImageStyle} source = {{  uri: item.profileImage }} />
+                      <Text style = {styles.eachFollowerNameStyle} >{item.username}</Text>
+                    </TouchableOpacity>
+
+                    <Divider styleName="line" />
+                  </View>
+                )
+              }
             }
           />
-      </View>
     )
   }
 }

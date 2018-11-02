@@ -3,7 +3,7 @@ import {Platform, StyleSheet, Text, View} from 'react-native';
 
 
 import firebase from 'firebase';
-import config from './src/config'
+import {config} from './src/config'
 
 import AllRoutes from './src/router'
 

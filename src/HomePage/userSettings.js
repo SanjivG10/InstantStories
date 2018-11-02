@@ -14,9 +14,7 @@ class UserSettings extends React.Component
   render()
   {
     return(
-      <View>
         <UserInfoView showPanel= {false} editable />
-      </View>
     )
   }
 }

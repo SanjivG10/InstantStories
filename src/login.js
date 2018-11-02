@@ -3,28 +3,29 @@ import {Text, Dimensions,TouchableOpacity} from 'react-native'
 import {TextInput, Screen, Image, Button,Title, NavigationBar } from '@shoutem/ui'
 import {Actions} from 'react-native-router-flux'
 
+//firebase
 import firebase from 'firebase'
 
+
+//selfmade Component
 import Home from './HomePage/home'
-import config from './config'
 import Spinner from './spinner'
+import {width} from './config'
 
-
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
 
 
 
 const styles= {
+  screenStyle: {
+    backgroundColor: '#FFF'
+  },
+
   textInputStyle: {
     width: width,
     elevation: 2 ,
     marginTop: 10,
     marginLeft: 10
 
-  },
-  screenStyle: {
-    backgroundColor: '#FFF'
   },
 
   imageStyle: {
@@ -46,8 +47,11 @@ const styles= {
   errorTextStyle: {
     color: 'red',
     alignSelf: 'center',
-    fontSize: 16
+    fontSize: 16,
+    marginTop: 20,
+    marginLeft: 20
   },
+  
   signUpTextStyle: {
     position: 'absolute',
     bottom: 0,
@@ -64,76 +68,61 @@ class Login extends React.Component
     super(props)
   }
 
-
-
   state = {
     error: '',
     email: '',
     password: '',
     isLoading: false,
-    user:null
+    user: undefined
   }
 
   componentWillMount()
   {
     firebase.auth().onAuthStateChanged(user => {
-      var oldProperties =  {...this.state}
-      oldProperties.user = user
-      this.setState(oldProperties)
+      this.setState({
+        user
+      })
     })
   }
 
 
   startLoggingIn(email, password){
 
-    var oldProperties =  {...this.state}
-    oldProperties.isLoading = true
-    this.setState(oldProperties)
+    this.setState({
+      isLoading: true
+    })
 
-    if (this.state.password.length > 0)
-      {
-        console.warn("Inside")
-        firebase.auth().signInWithEmailAndPassword (email,password).then(
-          ()=> Actions.main_home()
-      ).catch((error)=>{
-        var oldProperties =  {...this.state}
-        oldProperties.error = error.message
-        oldProperties.isLoading = false
-        this.setState(oldProperties)
+    firebase.auth().signInWithEmailAndPassword (email,password).then(
+        ()=> Actions.main_home()
+    ).catch((error)=>{
+      this.setState({
+        isLoading: false,
+        error : error.message
       })
-    }
-
-    else
-    {
-      var oldProperties =  {...this.state}
-      oldProperties.isLoading = false
-      this.setState(oldProperties)
-      console.warn('No password?')
-    }
+    })
   }
 
   setEmailText(email)
   {
-    var oldProperties =  {...this.state}
-    oldProperties.email = email
-    this.setState(oldProperties)
+    this.setState({
+      email
+    })
+
   }
 
   setPasswordText(password)
   {
-    var oldProperties =  {...this.state}
-    oldProperties.password = password
-    this.setState(oldProperties)
+    this.setState({
+      password
+    })
   }
-
-
 
   render()
   {
 
     if (this.state.user)
     {
-      Actions.home()
+      Actions.home({user: this.state.user})
     }
 
     return(
@@ -146,7 +135,7 @@ class Login extends React.Component
         <Image
           styleName="small"
           style= {styles.imageStyle}
-          source={require('./lock.png')}
+          source={require('./icons/lock.png')}
         />
 
         <TextInput
